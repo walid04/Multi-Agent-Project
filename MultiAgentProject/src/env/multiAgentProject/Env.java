@@ -33,6 +33,12 @@ public class Env extends GUIArtifact {
 				/* Send signal to twitter like assistant agent to focus on created artifact */
 				signal("focusOnTwitterLikeCommunity", envGUI.getCommunityNameTextField().getText());
 			}
+			if (envGUI.getCommunityTypeComboBox().getSelectedItem().toString().equals("Forum Like Community")) {
+				/* Send signal to assistant agent to create community (artifact) */
+				signal("createCommunity", "ForumLikeCommunity", envGUI.getCommunityNameTextField().getText());
+				/* Send signal to twitter like assistant agent to focus on created artifact */
+				signal("focusOnForumLikeCommunity", envGUI.getCommunityNameTextField().getText());
+			}
 		}
 	}
 }

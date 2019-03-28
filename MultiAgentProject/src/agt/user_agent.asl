@@ -28,7 +28,12 @@
               <- println("Creating community");
                	 makeArtifact(CommunityName,"multiAgentProject.TwitterLikeCommunityArtifact",[CommunityName],Id);
                  println("Artifact created").
-
+                 
++createCommunity3("ForumLikeCommunity",CommunityName)
+              <- println("Creating community");
+               	 makeArtifact(CommunityName,"multiAgentProject.TwitterLikeCommunityArtifact",[CommunityName],Id);
+                 println("Artifact created for Forum").
+                 
 { include("$jacamoJar/templates/common-cartago.asl") }
 { include("$jacamoJar/templates/common-moise.asl") }
 

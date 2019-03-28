@@ -46,6 +46,17 @@ public class Env extends GUIArtifact {
 				Community.communities.add(tlc);
 				envGUI.getCommunityToJoinComboBox().addItem(tlc.getCommunityName());
 			}
+			else if (envGUI.getCommunityTypeComboBox().getSelectedItem().toString().equals("Forum like Community")) {
+				System.out.println("Creating forum like community");
+				ForumLikeCommunity tlc = new ForumLikeCommunity();
+				tlc.setCommunityName(envGUI.getCommunityNameTextField().getText());
+				
+				signal("createCommunity", "ForumLikeCommunity", envGUI.getCommunityNameTextField().getText());
+				signal("focusOnForumLikeCommunity", envGUI.getCommunityNameTextField().getText());
+				
+				Community.communities.add(tlc);
+				envGUI.getCommunityToJoinComboBox().addItem(tlc.getCommunityName());
+			}
 		}
 	}
 	

@@ -20,7 +20,9 @@ mas client {
   	agent twitter_like_agent : twitter_like_agent.asl {
 //  		instances : 2
   	}
-  	
+  	agent forum_like_agent : forum_like_agent.asl {
+//  		instances : 2
+  	}
 //  	workspace client {
 //  		
 //  	}

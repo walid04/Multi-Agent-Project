@@ -2,7 +2,7 @@ package multiAgentProject;
 
 import java.util.List;
 
-public class ForumLikeCommunity {
+public class ForumLikeCommunity extends Community{
 	private String communityName;
 	private List<String> message;
 	

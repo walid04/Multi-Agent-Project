@@ -1,4 +1,3 @@
-//utf-8
 // Agent agent3 in project MultiAgentProject
 
 /* Initial beliefs and rules */
@@ -13,6 +12,7 @@
 				    .print("hello world.").
 
 +!setup          <- joinRemoteWorkspace("server","localhost",_);
+					.wait(1000)
 					lookupArtifact("Env", Env);
 				    focus(Env);
 				    println("Ready").

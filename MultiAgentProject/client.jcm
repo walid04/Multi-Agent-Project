@@ -23,6 +23,10 @@ mas client {
   	agent forum_like_agent : forum_like_agent.asl {
 //  		instances : 2
   	}
+  	agent test_agent : test_agent.asl {
+//  		instances : 2
+  	}
+  	
 //  	workspace client {
 //  		
 //  	}

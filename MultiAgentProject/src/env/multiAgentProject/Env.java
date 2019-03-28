@@ -43,8 +43,12 @@ public class Env extends GUIArtifact {
 				signal("createCommunity", "TwitterLikeCommunity", envGUI.getCommunityNameTextField().getText());
 				signal("focusOnTwitterLikeCommunity", envGUI.getCommunityNameTextField().getText());
 				
+				envGUI.getCommunityNameTextField().setText("");
+				
 				Community.communities.add(tlc);
 				envGUI.getCommunityToJoinComboBox().addItem(tlc.getCommunityName());
+				envGUI.getCommunityToDeleteComboBox().addItem(tlc.getCommunityName());
+				envGUI.getCommunityToLeaveComboBox().addItem(tlc.getCommunityName());
 			}
 			else if (envGUI.getCommunityTypeComboBox().getSelectedItem().toString().equals("Forum like Community")) {
 				System.out.println("Creating forum like community");
@@ -65,6 +69,17 @@ public class Env extends GUIArtifact {
 		if (envGUI.getCommunityToDeleteComboBox().getSelectedItem() != null) {
 			System.out.println("Deleting Community");
 			signal("deleteCommunity", envGUI.getCommunityToDeleteComboBox().getSelectedItem().toString());
+			
+			for (int i = 0; i < Community.communities.size(); i++) {
+				if (Community.communities.get(i).getCommunityName().equals(envGUI.getCommunityToDeleteComboBox().getSelectedItem().toString())) {
+					Community.communities.remove(i);
+					break;
+				}
+			}
+
+			envGUI.getCommunityToJoinComboBox().removeItem(envGUI.getCommunityToDeleteComboBox().getSelectedItem());
+			envGUI.getCommunityToLeaveComboBox().removeItem(envGUI.getCommunityToDeleteComboBox().getSelectedItem());
+			envGUI.getCommunityToDeleteComboBox().removeItem(envGUI.getCommunityToDeleteComboBox().getSelectedItem());
 		}
 	}
 	
@@ -73,6 +88,8 @@ public class Env extends GUIArtifact {
 		if (envGUI.getCommunityToLeaveComboBox().getSelectedItem() != null) {
 			System.out.println("Leaving Community");
 			signal("leaveCommunity", envGUI.getCommunityToLeaveComboBox().getSelectedItem().toString());
+			
+			envGUI.getCommunityToLeaveComboBox().removeItem(envGUI.getCommunityToLeaveComboBox().getSelectedItem());
 		}
 	}
 }

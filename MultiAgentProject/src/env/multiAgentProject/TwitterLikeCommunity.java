@@ -2,23 +2,14 @@ package multiAgentProject;
 
 import java.util.List;
 
-public class TwitterLikeCommunity {
-	private String communityName;
-	private List<String> message;
+public class TwitterLikeCommunity extends Community {
+	private List<String> messages;
 	
-	public String getCommunityName () {
-		return communityName;
+	public List<String> getMessages () {
+		return messages;
 	}
 	
-	public void setCommunityName (String communityName) {
-		this.communityName = communityName;
-	}
-	
-	public List<String> getMessage () {
-		return message;
-	}
-	
-	public void setMessage (List<String> message) {
-		this.message = message;
+	public void setMessages (List<String> messages) {
+		this.messages = messages;
 	}
 }

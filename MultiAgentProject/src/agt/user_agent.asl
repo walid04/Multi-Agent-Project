@@ -9,19 +9,25 @@
 /* Plans */
 
 +!greet : true   <- !setup;
-				    .myName(Name);
-				    .concat("Hello from ",Name,Msg);
-				    println(Msg).
+				    .print("hello world.").
 
 +!setup          <- joinRemoteWorkspace("server","localhost",_);
 				    !setupArtifact.
 				  
-+!setupArtifact  <- makeArtifact("Env","multiAgentProject.Env",[],Id);
++!setupArtifact  <- makeArtifact("Env","multiAgentProject.Env",[""],Id);
 				    focus(Id);
 				    println("Ready").
+//				    !createCommunity.
+				    
+//+!createCommunity
+//                <- println("Creating community");
+//               	   makeArtifact("TwitterLikeCommunity","multiAgentProject.TwitterLikeCommunityArtifact",[],Id);
+//                   println("Artifact created").
 				  
 +createCommunity("TwitterLikeCommunity",CommunityName)
-              <- makeArtifact(CommunityName,"multiAgentProject.TwitterLikeCommunityArtifact",[CommunityName],Id).
+              <- println("Creating community");
+               	 makeArtifact(CommunityName,"multiAgentProject.TwitterLikeCommunityArtifact",[CommunityName],Id);
+                 println("Artifact created").
 
 { include("$jacamoJar/templates/common-cartago.asl") }
 { include("$jacamoJar/templates/common-moise.asl") }

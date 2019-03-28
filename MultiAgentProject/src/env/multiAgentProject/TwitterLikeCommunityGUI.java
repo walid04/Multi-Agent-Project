@@ -11,7 +11,7 @@ import javax.swing.JButton;
  * @author Walid
  *
  */
-public class TwitterLikeCommunityGUI extends JFrame{
+public class TwitterLikeCommunityGUI extends JFrame {
 	private JTextPane textPane;
 	private JButton btnPostMessage;
 
@@ -31,15 +31,15 @@ public class TwitterLikeCommunityGUI extends JFrame{
 		panel.setLayout(null);
 		
 		JLabel lblMessageToPost = new JLabel("Message to post :");
-		lblMessageToPost.setBounds(27, 87, 99, 14);
+		lblMessageToPost.setBounds(97, 118, 163, 14);
 		panel.add(lblMessageToPost);
 		
 		textPane = new JTextPane();
-		textPane.setBounds(136, 48, 265, 95);
+		textPane.setBounds(220, 78, 286, 95);
 		panel.add(textPane);
 		
 		btnPostMessage = new JButton("Post Message");
-		btnPostMessage.setBounds(174, 193, 99, 23);
+		btnPostMessage.setBounds(219, 225, 138, 23);
 		panel.add(btnPostMessage);
 	}
 }

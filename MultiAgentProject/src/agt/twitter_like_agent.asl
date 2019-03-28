@@ -9,15 +9,16 @@
 /* Plans */
 
 +!greet : true   <- !setup;
-				    .myName(Name);
-				    .concat("Hello from ",Name,Msg);
-				    println(Msg).
+				    .print("hello world.").
 
 +!setup          <- joinRemoteWorkspace("server","localhost",_);
-				    focus("Env").
+					lookupArtifact("Env", Env);
+				    focus(Env);
+				    println("Ready").
 				  
 +focusOnTwitterLikeCommunity(CommunityName)
-               <- focus(CommunityName).
+               <- focusWhenAvailable(CommunityName);
+               	  .print("prêt").
 
 { include("$jacamoJar/templates/common-cartago.asl") }
 { include("$jacamoJar/templates/common-moise.asl") }

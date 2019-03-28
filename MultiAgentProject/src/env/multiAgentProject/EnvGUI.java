@@ -50,7 +50,7 @@ public class EnvGUI extends JFrame {
 		return btnCreateCommunity;
 	}
 	
-	public JButton getBtnDeleteCOmmunity () {
+	public JButton getBtnDeleteCommunity () {
 		return btnDeleteCommunity;
 	}
 	
@@ -83,7 +83,7 @@ public class EnvGUI extends JFrame {
 		panelCreateCommunity.add(lblType);
 		
 		communityTypeComboBox = new JComboBox();
-		communityTypeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Twitter like Community","Forum Like Community"}));
+		communityTypeComboBox.setModel(new DefaultComboBoxModel(new String[] {"Twitter like Community"}));
 		communityTypeComboBox.setBounds(274, 116, 155, 20);
 		panelCreateCommunity.add(communityTypeComboBox);
 		

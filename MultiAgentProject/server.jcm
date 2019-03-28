@@ -14,7 +14,7 @@
 
 mas server {
 
-//  	agent agent_server {
+//  	agent server_agent {
 //  		
 //  	}
 

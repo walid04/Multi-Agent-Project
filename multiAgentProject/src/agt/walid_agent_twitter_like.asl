@@ -14,7 +14,9 @@
 +!setup          <- joinRemoteWorkspace("server","localhost",_);
 				    !setupArtifact.
 				  
-+!setupArtifact  <- makeArtifact("Env","multiAgentProject.Env",[""],Id);
++!setupArtifact  <- .my_name(Name);
+					.print(Name);
+					makeArtifact(Name,"multiAgentProject.Env",[Name],Id);
 				    focus(Id);
 				    println("Ready").
 //				    !createCommunity.
@@ -26,14 +28,42 @@
 				  
 +createCommunity("TwitterLikeCommunity",CommunityName)
                 <- println("Creating community");
+               	   .my_name(Name);
                	   makeArtifact(CommunityName,"multiAgentProject.TwitterLikeCommunityArtifact",[CommunityName],Id);
+//               	   .send(twitter_like_agent,achieve,focusOnEnv(Name, CommunityName));
+				   !focusOnCommunity(CommunityName);
                    println("Artifact created").
+				  
++!focusOnCommunity(CommunityName)
+                 <- .print("focusing on community");
+                 	focusWhenAvailable(CommunityName);
+               	    .print("prêt").
                  
-+createCommunity3("ForumLikeCommunity",CommunityName)
-              <- println("Creating community");
-               	 makeArtifact(CommunityName,"multiAgentProject.ForumLikeCommunityArtifact",[CommunityName],Id);
-                 println("Artifact created for Forum").
-                 
++joinCommunity(CommunityName)
+			   <- println("Joining community");
+				  lookupArtifact(CommunityName,Community);
+				  focus(Community);
+                  .println("Joined community").
+                  
++postMessage(Message, Sender, Receiver)
+			   <- .my_name(Name);
+			   	  .print(Name);
+			   	  .print(Sender);
+			      if (Sender==Name) {
+			   	  	println("yes");
+			      }
+				  else {
+				  	println("no");
+				  }
+//			      if (Sender==Name) {
+			   	  	println("Posting message");
+			      	.send(Receiver,achieve,message(Message));
+//			      }
+			      .
+			      
++!message(Message)
+               <- println(Message).
+			   	  
 +deleteCommunity(communityName)
 			    <- println("Deleting community");
 			       lookupArtifact(CommunityName, Community);
@@ -43,6 +73,11 @@
 			    <- println("leaving community");
 			       lookupArtifact(CommunityName, Community);
 			       stopFocus(Community).
+                 
++createCommunity3("ForumLikeCommunity",CommunityName)
+               <- println("Creating community");
+                  makeArtifact(CommunityName,"multiAgentProject.ForumLikeCommunityArtifact",[CommunityName],Id);
+                  println("Artifact created for Forum").
 			       
 { include("$jacamoJar/templates/common-cartago.asl") }
 { include("$jacamoJar/templates/common-moise.asl") }

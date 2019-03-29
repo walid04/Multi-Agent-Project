@@ -14,18 +14,18 @@
 
 mas client {
   	
-  	agent user_agent : user_agent.asl {
-//  		instances : 2
+  	agent walid_agent_twitter_like : walid_agent_twitter_like.asl {
+  		instances : 2
   	}
-  	agent twitter_like_agent : twitter_like_agent.asl {
-//  		instances : 2
-  	}
+//  	agent twitter_like_agent : twitter_like_agent.asl {
+////  		instances : 2
+//  	}
   	agent forum_like_agent : forum_like_agent.asl {
 //  		instances : 2
   	}
-  	agent test_agent : test_agent.asl {
-//  		instances : 2
-  	}
+//  	agent test_agent : test_agent.asl {
+////  		instances : 2
+//  	}
   	
 //  	workspace client {
 //  		

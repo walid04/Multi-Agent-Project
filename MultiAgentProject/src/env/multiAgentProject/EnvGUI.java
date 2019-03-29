@@ -50,6 +50,10 @@ public class EnvGUI extends JFrame {
 		return btnCreateCommunity;
 	}
 	
+	public JButton getBtnJoinCommunity () {
+		return btnJoinCommunity;
+	}
+	
 	public JButton getBtnDeleteCommunity () {
 		return btnDeleteCommunity;
 	}

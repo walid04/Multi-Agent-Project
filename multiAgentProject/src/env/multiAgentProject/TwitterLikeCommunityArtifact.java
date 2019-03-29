@@ -15,11 +15,15 @@ import cartago.tools.GUIArtifact;
  */
 public class TwitterLikeCommunityArtifact extends GUIArtifact {
 	private TwitterLikeCommunityGUI tlc;
-	private TwitterLikeCommunity tlc2;
+	private String communityOwner;
 	private String community;
 	
 	public String getCommunity () {
 		return community;
+	}
+	
+	public String getOwner () {
+		return communityOwner;
 	}
 	
 	public void init (String s) {
@@ -32,7 +36,9 @@ public class TwitterLikeCommunityArtifact extends GUIArtifact {
 		linkActionEventToOp(tlc.getBtnDeleteMessage(), "deleteMessage");
 		
 		tlc.setTitle(s);
-		community = s;
+		String[] separator = s.split("-");
+		community = separator[0];
+		communityOwner = separator[1];
 		
 		tlc.setVisible(true);
 		
@@ -42,22 +48,43 @@ public class TwitterLikeCommunityArtifact extends GUIArtifact {
 	@OPERATION
 	public void postMessage (ActionEvent e) {
 		if (!tlc.getTextPane().getText().equals("")) {
-			System.out.println("Posting message to community members");
+			System.out.println("Posting message to twitter like community members");
 			
 			for (int i = 0; i < Community.communities.size(); i++) {
 				if (Community.communities.get(i).getCommunityName().equals(community)) {
 					for (int k = 0; k < Community.communities.get(i).getMembers().size(); k++) {
-						System.out.println("Members of community : " + Community.communities.get(i).getMembers().get(k));
-						System.out.println("Owner of community : " + Community.communities.get(i).getOwner().getUser());
-						signal("postMessage", tlc.getTextPane().getText(), Community.communities.get(i).getOwner().getUser(), Community.communities.get(i).getMembers().get(k));
-						JOptionPane.showMessageDialog(null, "Message posted", "Info Box", JOptionPane.INFORMATION_MESSAGE);
+						String sender = "twitter_like_agent_walid" + Community.communities.get(i).getOwner().getUser().replace("user_agent", "");
+						String receiver = "twitter_like_agent_walid" +  Community.communities.get(i).getMembers().get(k).replace("user_agent", "");
+
+						if (sender.equals(communityOwner)) {
+							signal("postMessage", tlc.getTextPane().getText(), sender, receiver);
+							JOptionPane.showMessageDialog(null, "Message posted", "Info Box", JOptionPane.INFORMATION_MESSAGE);
+						}
 					}
 				}
 			}
-//			signal("postMessage", tlc.getTextPane().getText());
 			
-//			tlc2.getMessages().add(tlc.getTextPane().getText());
-			tlc.getPostedMessagesComboBox().addItem(tlc.getTextPane().getText());
+			for (int i = 0; i < Community.communities.size(); i++) {
+				if (Community.communities.get(i).getCommunityName().equals(community)) {
+					Community.communities.get(i).getMessages().add(tlc.getTextPane().getText());
+					break;
+				}
+			}
+			
+			for (int i = 0; i < tlc.getPostedMessagesComboBox().getItemCount(); i++) {
+				tlc.getPostedMessagesComboBox().removeItemAt(i);
+			}
+			for (int i = 0; i < Community.communities.size(); i++) {
+				if (Community.communities.get(i).getCommunityName().equals(community)) {
+					if (Community.communities.get(i).getMessages() != null) {
+						for (int j = 0; j < Community.communities.get(i).getMessages().size(); j++) {
+							tlc.getPostedMessagesComboBox().addItem(Community.communities.get(i).getMessages().get(j));
+						}
+						break;
+					}
+				}
+			}
+			
 			tlc.getTextPane().setText("");
 		}
 	}
@@ -65,13 +92,18 @@ public class TwitterLikeCommunityArtifact extends GUIArtifact {
 	@OPERATION
 	public void deleteMessage (ActionEvent e) {
 		if (tlc.getPostedMessagesComboBox().getSelectedItem() != null) {
+			for (int i = 0; i < Community.communities.size(); i++) {
+				if (Community.communities.get(i).getCommunityName().equals(community)) {
+					for (int j = 0; j < Community.communities.get(i).getMessages().size(); i++) {
+						if (Community.communities.get(i).getMessages().get(j).equals(tlc.getPostedMessagesComboBox().getSelectedItem())) {
+							Community.communities.get(i).getMessages().remove(j);
+							break;
+						}
+					}
+				}
+			}
+			
 			System.out.println("Deleting message");
-//			for (int i = 0; i < tlc2.getMessages().size(); i++) {
-//				if (tlc2.getMessages().get(i).equals(tlc.getPostedMessagesComboBox().getSelectedItem())) {
-//					tlc2.getMessages().remove(i);
-//					break;
-//				}
-//			}
 			tlc.getPostedMessagesComboBox().removeItem(tlc.getPostedMessagesComboBox().getSelectedItem());
 			JOptionPane.showMessageDialog(null, "Message deleted", "Info Box", JOptionPane.INFORMATION_MESSAGE);
 		}

@@ -1,15 +1,16 @@
 package multiAgentProject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TwitterLikeCommunity extends Community {
-	private List<String> messages;
+	private ArrayList<String> messages = new ArrayList<String>();
 	
-	public List<String> getMessages () {
+	public ArrayList<String> getMessages () {
 		return messages;
 	}
 	
-	public void setMessages (List<String> messages) {
+	public void setMessages (ArrayList<String> messages) {
 		this.messages = messages;
 	}
 }

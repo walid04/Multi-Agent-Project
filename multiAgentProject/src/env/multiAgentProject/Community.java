@@ -8,6 +8,11 @@ public class Community {
 	private Env owner;
 	private ArrayList<String> members = new ArrayList<String>();
 	public static ArrayList<Community> communities = new ArrayList<Community>();
+	private ArrayList<String> messages = new ArrayList<String>();
+	
+	public ArrayList<String> getMessages () {
+		return messages;
+	}
 	
 	public String getCommunityName () {
 		return communityName;

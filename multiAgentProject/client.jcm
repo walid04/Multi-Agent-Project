@@ -13,29 +13,13 @@
 */
 
 mas client {
-  	
-  	agent walid_agent_twitter_like : walid_agent_twitter_like.asl {
+  	agent user_agent : user_agent.asl {
   		instances : 2
   	}
-//  	agent twitter_like_agent : twitter_like_agent.asl {
-////  		instances : 2
-//  	}
-  	agent forum_like_agent : forum_like_agent.asl {
-//  		instances : 2
-  	}
-//  	agent test_agent : test_agent.asl {
-////  		instances : 2
-//  	}
   	
-//  	workspace client {
-//  		
-//  	}
-//
-//  	// agent source path
-//  	asl-path: src/agt
-//              src/agt/inc
-//
-//  	platform: cartago()
+  	agent twitter_like_agent_walid : twitter_like_agent_walid.asl {
+  		instances : 2
+  	}
 
   	// change localhost to the IP of the machine where the server is launched
   	node servernode running @ localhost

@@ -3,11 +3,10 @@ package multiAgentProject;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
-import javax.swing.AbstractButton;
 import javax.swing.JOptionPane;
 
-import cartago.INTERNAL_OPERATION;
 import cartago.OPERATION;
 import cartago.tools.GUIArtifact;
 
@@ -18,6 +17,11 @@ import cartago.tools.GUIArtifact;
 public class Env extends GUIArtifact {
 	private EnvGUI envGUI;
 	private String user;
+	private ArrayList<TwitterLikeCommunity> tlcs = new ArrayList<TwitterLikeCommunity>();
+	
+	public ArrayList<TwitterLikeCommunity> getTwitterLikeCommunity () {
+		return tlcs;
+	}
 	
 	public EnvGUI getEnvGUI () {
 		return envGUI;
@@ -50,45 +54,45 @@ public class Env extends GUIArtifact {
 	
 	@OPERATION 
 	public void createCommunity (ActionEvent e) {
+		int test = 0;
+
 		if (!envGUI.getCommunityNameTextField().getText().equals("")) {
-			if (envGUI.getCommunityTypeComboBox().getSelectedItem().toString().equals("Twitter like Community")) {
-				System.out.println("Creating twitter like community");
-				
-//				System.out.println(this.getCurrentOpAgentId().getAgentName());
-//				System.out.println(Users.users);
-				
-				TwitterLikeCommunity tlc = new TwitterLikeCommunity();
-				tlc.setCommunityName(envGUI.getCommunityNameTextField().getText());
-				tlc.setOwner(this);
-				
-				signal("createCommunity", "TwitterLikeCommunity", envGUI.getCommunityNameTextField().getText());
-				signal("focusOnTwitterLikeCommunity", envGUI.getCommunityNameTextField().getText(), user);
-				JOptionPane.showMessageDialog(null, "Community created", "Info Box", JOptionPane.INFORMATION_MESSAGE);
-				
-				envGUI.getCommunityNameTextField().setText("");
-				
-				Community.communities.add(tlc);
-				
-				for (int i = 0; i < Users.users.size(); i++) {
-					if (Users.users.get(i).getEnvGUI() == envGUI) {
-						Users.users.get(i).getEnvGUI().getCommunityToDeleteComboBox().addItem(tlc.getCommunityName());
-						Users.users.get(i).getEnvGUI().getCommunityToLeaveComboBox().addItem(tlc.getCommunityName());
-					}
-					else {
-						Users.users.get(i).getEnvGUI().getCommunityToJoinComboBox().addItem(tlc.getCommunityName());
+			for (int i = 0; i < Community.communities.size(); i++) {
+				if (Community.communities.get(i).getCommunityName().equals(envGUI.getCommunityNameTextField().getText())) {
+					test = 1;
+					break;
+				}
+			}
+			if (test == 0) {
+				if (envGUI.getCommunityTypeComboBox().getSelectedItem().toString().equals("Twitter like Community")) {
+					System.out.println("Creating twitter like community");
+
+					TwitterLikeCommunity tlc = new TwitterLikeCommunity();
+					tlc.setCommunityName(envGUI.getCommunityNameTextField().getText());
+					tlc.setOwner(this);
+
+					signal("createCommunity", envGUI.getCommunityNameTextField().getText(), "twitter_like_agent_walid"+user.replace("user_agent", ""));
+					JOptionPane.showMessageDialog(null, "Community created", "Info Box", JOptionPane.INFORMATION_MESSAGE);
+
+					envGUI.getCommunityNameTextField().setText("");
+
+					tlc.setOwner(this);
+					Community.communities.add(tlc);
+
+					for (int i = 0; i < Users.users.size(); i++) {
+						if (Users.users.get(i).getEnvGUI() == envGUI) {
+							Users.users.get(i).getEnvGUI().getCommunityToDeleteComboBox().addItem(tlc.getCommunityName());
+							Users.users.get(i).getEnvGUI().getCommunityToLeaveComboBox().addItem(tlc.getCommunityName());
+						}
+						else {
+							Users.users.get(i).getEnvGUI().getCommunityToJoinComboBox().addItem(tlc.getCommunityName());
+						}
 					}
 				}
 			}
-			else if (envGUI.getCommunityTypeComboBox().getSelectedItem().toString().equals("Forum like Community")) {
-				System.out.println("Creating forum like community");
-				ForumLikeCommunity flc = new ForumLikeCommunity();
-				flc.setCommunityName(envGUI.getCommunityNameTextField().getText());
-				
-				signal("createCommunity3", "ForumLikeCommunity", envGUI.getCommunityNameTextField().getText());
-				signal("focusOnForumLikeCommunity", envGUI.getCommunityNameTextField().getText());
-				
-				Community.communities.add(flc);
-				envGUI.getCommunityToJoinComboBox().addItem(flc.getCommunityName());
+			else {
+				JOptionPane.showMessageDialog(null, "This community name already exists, please choose another one", "Info Box", JOptionPane.INFORMATION_MESSAGE);
+				envGUI.getCommunityNameTextField().setText("");
 			}
 		}
 	}
@@ -98,15 +102,24 @@ public class Env extends GUIArtifact {
 		if (envGUI.getCommunityToJoinComboBox().getSelectedItem() != null) {
 			System.out.println("Joining Community");
 			
+			String agent = null;
 			for (int i = 0; i < Community.communities.size(); i++) {
 				if (Community.communities.get(i).getCommunityName().equals(envGUI.getCommunityToJoinComboBox().getSelectedItem().toString())) {
 					Community.communities.get(i).getMembers().add(user);
+					agent = Community.communities.get(i).getClass().toString();
+					break;
 				}
 			}
 			
-			System.out.println("Community to join : " + envGUI.getCommunityToJoinComboBox().getSelectedItem().toString());
-			signal("joinCommunity", envGUI.getCommunityToJoinComboBox().getSelectedItem().toString());
-			JOptionPane.showMessageDialog(null, "Community joined", "Info Box", JOptionPane.INFORMATION_MESSAGE);
+			if (agent.replaceAll("class multiAgentProject.", "").equals("TwitterLikeCommunity")) {
+				agent = "twitter_like_agent_walid" + user.replace("user_agent", "");
+				
+				System.out.println("Twitter Like Community to join : " + envGUI.getCommunityToJoinComboBox().getSelectedItem().toString());
+				signal("joinCommunity", envGUI.getCommunityToJoinComboBox().getSelectedItem().toString(), agent);
+				envGUI.getCommunityToLeaveComboBox().addItem(envGUI.getCommunityToJoinComboBox().getSelectedItem());
+				envGUI.getCommunityToJoinComboBox().removeItem(envGUI.getCommunityToJoinComboBox().getSelectedItem());
+				JOptionPane.showMessageDialog(null, "Twitter Like Community joined", "Info Box", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 	}
 	
@@ -114,19 +127,51 @@ public class Env extends GUIArtifact {
 	public void deleteCommunity (ActionEvent e) {
 		if (envGUI.getCommunityToDeleteComboBox().getSelectedItem() != null) {
 			System.out.println("Deleting Community");
-			signal("deleteCommunity", envGUI.getCommunityToDeleteComboBox().getSelectedItem().toString());
 			
 			for (int i = 0; i < Community.communities.size(); i++) {
 				if (Community.communities.get(i).getCommunityName().equals(envGUI.getCommunityToDeleteComboBox().getSelectedItem().toString())) {
+					for (int j = 0; j < Community.communities.get(i).getMembers().size(); j++) {
+						signal("informUsersOfDeletedCommunity", envGUI.getCommunityToDeleteComboBox().getSelectedItem().toString(), "twitter_like_agent_walid"+Community.communities.get(i).getMembers().get(j).replace("user_agent", ""));
+					}
+				}
+			}
+
+			String agent = null;
+			for (int i = 0; i < Community.communities.size(); i++) {
+				if (Community.communities.get(i).getCommunityName().equals(envGUI.getCommunityToDeleteComboBox().getSelectedItem().toString())) {
+					agent = Community.communities.get(i).getClass().toString();
 					Community.communities.remove(i);
 					break;
 				}
 			}
-			JOptionPane.showMessageDialog(null, "Community deleted", "Info Box", JOptionPane.INFORMATION_MESSAGE);
-
-			envGUI.getCommunityToJoinComboBox().removeItem(envGUI.getCommunityToDeleteComboBox().getSelectedItem());
-			envGUI.getCommunityToLeaveComboBox().removeItem(envGUI.getCommunityToDeleteComboBox().getSelectedItem());
-			envGUI.getCommunityToDeleteComboBox().removeItem(envGUI.getCommunityToDeleteComboBox().getSelectedItem());
+			
+			if (agent.replaceAll("class multiAgentProject.", "").equals("TwitterLikeCommunity")) {
+				agent = "twitter_like_agent_walid" + user.replace("user_agent", "");
+				
+				JOptionPane.showMessageDialog(null, "Twitter Like Community deleted", "Info Box", JOptionPane.INFORMATION_MESSAGE);
+				
+				Object o = envGUI.getCommunityToDeleteComboBox().getSelectedItem();
+				for (int i = 0; i < Users.users.size(); i++) {
+					for (int j = 0; j < Users.users.get(i).getEnvGUI().getCommunityToLeaveComboBox().getItemCount(); j++) {
+						if (Users.users.get(i).getEnvGUI().getCommunityToLeaveComboBox().getItemAt(j) == o) {
+							Users.users.get(i).getEnvGUI().getCommunityToLeaveComboBox().removeItemAt(j);
+							break;
+						}
+					}
+					for (int j = 0; j < Users.users.get(i).getEnvGUI().getCommunityToJoinComboBox().getItemCount(); j++) {
+						if (Users.users.get(i).getEnvGUI().getCommunityToJoinComboBox().getItemAt(j) == o) {
+							Users.users.get(i).getEnvGUI().getCommunityToJoinComboBox().removeItemAt(j);
+							break;
+						}
+					}
+					for (int j = 0; j < Users.users.get(i).getEnvGUI().getCommunityToDeleteComboBox().getItemCount(); j++) {
+						if (Users.users.get(i).getEnvGUI().getCommunityToDeleteComboBox().getItemAt(j) == o) {
+							Users.users.get(i).getEnvGUI().getCommunityToDeleteComboBox().removeItemAt(j);;
+							break;
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -134,10 +179,23 @@ public class Env extends GUIArtifact {
 	public void leaveCommunity (ActionEvent e) {
 		if (envGUI.getCommunityToLeaveComboBox().getSelectedItem() != null) {
 			System.out.println("Leaving Community");
-			signal("leaveCommunity", envGUI.getCommunityToLeaveComboBox().getSelectedItem().toString());
-			JOptionPane.showMessageDialog(null, "Community left", "Info Box", JOptionPane.INFORMATION_MESSAGE);
+
+			String agent = null;
+			for (int i = 0; i < Community.communities.size(); i++) {
+				if (Community.communities.get(i).getCommunityName().equals(envGUI.getCommunityToLeaveComboBox().getSelectedItem().toString())) {
+					agent = Community.communities.get(i).getClass().toString();
+					break;
+				}
+			}
 			
-			envGUI.getCommunityToLeaveComboBox().removeItem(envGUI.getCommunityToLeaveComboBox().getSelectedItem());
+			if (agent.replaceAll("class multiAgentProject.", "").equals("TwitterLikeCommunity")) {
+				agent = "twitter_like_agent_walid" + user.replace("user_agent", "");
+				signal("leaveCommunity", envGUI.getCommunityToLeaveComboBox().getSelectedItem().toString(), agent);
+				JOptionPane.showMessageDialog(null, "Twitter like Community left", "Info Box", JOptionPane.INFORMATION_MESSAGE);
+
+				envGUI.getCommunityToJoinComboBox().addItem(envGUI.getCommunityToLeaveComboBox().getSelectedItem());
+				envGUI.getCommunityToLeaveComboBox().removeItem(envGUI.getCommunityToLeaveComboBox().getSelectedItem());
+			}
 		}
 	}
 }

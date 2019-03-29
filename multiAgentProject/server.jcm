@@ -13,18 +13,9 @@
 */
 
 mas server {
-
-//  	agent server_agent {
-//  		
-//  	}
-
   	workspace server {
   		
   	}
-
-  	// agent source path
-//  	asl-path: src/agt
-//              src/agt/inc
 
   	platform: cartago("infrastructure")
 
